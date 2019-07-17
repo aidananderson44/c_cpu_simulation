@@ -2,9 +2,14 @@
 #include <iostream>
 using namespace std;
 
-component_contructor(c_control::c_control, c_component, unordered_map<int, int> lookup_table,)
+component_contructor(c_control::c_control, c_component, 
+                    unordered_map<int, int> lookup_table,
+                    std::vector<std::pair<int, int> > port_ranges,
+                    int table_len,)
 {
     this->lookup_table = unordered_map<int, int>(lookup_table);
+    this->port_ranges = std::vector<std::pair<int, int> >(port_ranges);
+    this->table_len = table_len;
 }
 
 void c_control::update()
@@ -28,15 +33,20 @@ void c_control::update()
     if(it == this->lookup_table.end())
         cout << "Control did not match" << endl;
     int lt_val = it->second;
-    shift = s_width; 
+
+
+
     for(int i = 0; i < this->num_ports; i++)
     {
         string port = this->port_names[i];
-        int port_width = this->port_args[i];
-        shift -= port_width;
+        std::pair<int, int> range = this->port_ranges[i];
+        int lower = this->table_len - range.first;
+        int upper = this->table_len - range.second;
         int val = lt_val;
-        val = val >> shift;
-        val = val & w_mask(port_width);
+        val >>= upper;
+        val = val & w_mask(lower - upper);
         this->port[port] = val;
     }
+
+
 }

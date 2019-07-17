@@ -39,17 +39,18 @@ c_component::c_component(vector<string> source_names,
         this->port_names = vector<string>(port_names);
         this->port_args = vector<int>(this->port_names.size());
         this->num_ports = this->port_names.size();
-        for(unsigned int i = 0; i < this->port_names.size(); i++)
+        for(unsigned int i = 0; i < this->num_ports; i++)
             ((this->port_args))[i] = i;            
     }
     else if(port_args.size())
     {
         
+        
         this->port_args = vector<int>(port_args);
-        this->port_names = vector<string>(this->port_names.size());
-        this->num_ports = this->port_names.size();
-        for(unsigned int i = 0; i < this->port_args.size(); i++)
-            ((this->port_names))[i] = to_string(i);
+        this->port_names = vector<string>(this->port_args.size());
+        this->num_ports = this->port_args.size();
+        for(unsigned int i = 0; i < this->num_ports; i++)
+            ((this->port_names))[i] = "port_"+to_string(i);
     }
     else
     {
@@ -60,7 +61,7 @@ c_component::c_component(vector<string> source_names,
         this->port_args =  vector<int>(num_ports);
         for(int i = 0; i < this->num_ports; i++)
         {
-            ((this->port_names))[i] = to_string(i);
+            ((this->port_names))[i] = "port_"+to_string(i);
             ((this->port_args))[i] = i;
         }
 
@@ -93,6 +94,7 @@ void c_component::update_i()
 }
 void c_component::update()
 {
+
     int i = 0;
     for(auto &attr_name : this->source_names)
     {

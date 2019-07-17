@@ -16,7 +16,7 @@ public:
             std::vector<int> port_args,
             int num_ports,
             std::vector<int> port_widths,
-            int width ) {}
+            int width );
     virtual int binary_fun(int, int) = 0;
     void update();
 };

@@ -32,16 +32,18 @@ public:
     std::vector<std::string> source_names;
     std::vector<std::string> port_names;
     std::unordered_map<std::string, int> port;
-
-protected:
+    std::vector<int> port_args;
     std::vector<int> port_widths;
+    int num_ports = 1;
+    std::vector<int> source_widths;
+protected:
+    
     int width = 8;
     std::vector<int *> sources;
     std::vector<int> sources_val;
     std::vector<int> sources_val_i;
-    int num_ports = 1;
-    std::vector<int> source_widths;
-    std::vector<int> port_args;
+
+    
 };
 
 

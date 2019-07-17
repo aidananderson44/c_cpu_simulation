@@ -1,4 +1,5 @@
 from libcpp.vector cimport vector
+from libcpp.pair cimport pair
 from libcpp.unordered_map cimport unordered_map
 from libcpp.string cimport string
 from libcpp cimport bool
@@ -20,6 +21,11 @@ cdef extern from "c_component/c_component.h":
         vector[string] source_names
         vector[string] port_names
         unordered_map[string, int] port
+        vector[int] port_args;
+        vector[int] port_widths;
+        int num_ports;
+        vector[int] source_widths;
+        
 cdef extern from "c_component/c_wire.cpp":
     pass
 cdef extern from "c_component/c_wire.h":
@@ -38,6 +44,8 @@ cdef extern from "c_component/c_control.cpp":
 cdef extern from "c_component/c_control.h":
     cdef cppclass c_control(c_component):
         c_control(unordered_map[int, int] lookup_table,
+                vector[pair[int, int] ] port_ranges,
+                int table_len,
                 vector[string] source_names,
                 vector[int] source_widths,
                 vector[string] port_names,
@@ -45,17 +53,21 @@ cdef extern from "c_component/c_control.h":
                 int num_ports,
                 vector[int] port_widths,
                 int width)
+        unordered_map[int, int] lookup_table
+        vector[pair[int, int] ] port_ranges
 cdef extern from "c_component/c_splitter.cpp":
     pass
 cdef extern from "c_component/c_splitter.h":
     cdef cppclass c_splitter(c_component):
-        c_splitter(vector[string] source_names,
+        c_splitter(vector[pair[int, int] ] port_ranges,
+                    vector[string] source_names,
                     vector[int] source_widths,
                     vector[string] port_names,
                     vector[int] port_args,
                     int num_ports,
                     vector[int] port_widths,
                     int width)
+        vector[pair[int, int] ] port_ranges
 cdef extern from "c_component/c_register.cpp":
     pass
 cdef extern from "c_component/c_register.h":
