@@ -18,6 +18,7 @@ public:
         int width);
     void cycle();
     void update();
+    void load_memory(std::vector<int>, int);
     std::vector<int> mem;
 private:
     int ZERO = 0;

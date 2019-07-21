@@ -117,6 +117,8 @@ cdef extern from "c_component/c_memory.h":
                     int num_ports,
                     vector[int] port_widths,
                     int width)
+        void load_memory(vector[int], int)
+        vector[int] mem
 cdef extern from "c_component/c_ALU.cpp":
     pass
 cdef extern from "c_component/c_ALU.h": 

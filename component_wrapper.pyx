@@ -32,6 +32,8 @@ cdef class component:
       self.c_comp[0].update()
    cpdef update_i(self):
       self.c_comp[0].update_i()
+   cpdef cycle(self):
+      self.c_comp.cycle()
    def __getattr__(self, name):
       for c_str in self.c_comp.port_names:
          if c_str.decode() == name:   
@@ -157,6 +159,15 @@ cdef class memory(component):
                      **kwargs):
       args = self.init_args(**kwargs)
       self.c_comp = new c_memory(write_addr_s.p,write_val_s.p, word_len, randomized, addr_len, args[0], args[1], args[2], args[3], args[4], args[5], args[6])
+   def load_memory(self, vals, start_addr = 0):
+      (<c_memory *>self.c_comp).load_memory(vals, start_addr)
+
+
+
+   @property
+   def mem(self):
+      return (<c_memory *> self.c_comp).mem
+
 
 cdef class machine():
    def __init__(self, num_ticks):
@@ -164,11 +175,9 @@ cdef class machine():
       self.component_attributes = None
 
    def update_components(self):
-
       for attr in dir(self): 
             f = getattr(self, attr)
             if issubclass(type(f), component):
-               getattr(f, fun)()
                self.component_attributes += [f]
 
    cdef _pseudo_update(self, fun):
@@ -197,7 +206,7 @@ cdef class machine():
          self._update()
 
 
-        self._pseudo_update('cycle')
+      self._pseudo_update('cycle')
 def my_fun():
    
    
